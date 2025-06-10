@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 
 interface ITopic {
@@ -83,12 +84,12 @@ export default function Home() {
         </div>
         <div className="col-span-9 flex flex-col gap-4">
           <div className="flex justify-end items-center w-full gap-1">
-            <a
+            <Link
               href="/announcement"
               className="bg-blue-500 text-white p-2 rounded-md"
             >
               Duyuru Oluştur
-            </a>
+            </Link>
             <button
               onClick={handleOpenModal}
               className="bg-blue-500 text-white p-2 rounded-md"
