@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
+  --background: #fafafa;
   --foreground: #171717;
 }
 
@@ -20,8 +20,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+.custom-height {
+  @apply h-[calc(100dvh-500px)];
+}
+
+.slide-max-height {
+  @apply h-[calc(100dvh-250px)];
 }

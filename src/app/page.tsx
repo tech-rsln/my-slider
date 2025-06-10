@@ -1,101 +1,148 @@
-import Image from "next/image";
+"use client";
+import { useState } from "react";
+
+interface ITopic {
+  id: number;
+  title: string;
+  description: string;
+}
+
+interface IPost {
+  id: number;
+  user: {
+    id: number;
+    name: string;
+  };
+  description: string;
+  createdDate: string;
+}
+
+const topics: ITopic[] = Array.from({ length: 30 }, (_, index) => ({
+  id: index + 1,
+  description: `This is a test topic number ${index + 1}.`,
+  title: `Topic ${index + 1}`,
+}));
+
+const initialPosts: IPost[] = Array.from({ length: 30 }, (_, index) => ({
+  id: index + 1,
+  user: {
+    id: 100 + (index % 10),
+    name: `User ${index % 10}`,
+  },
+  description: `This is a test post number ${index + 1}.`,
+  createdDate: new Date(Date.now() - index * 86400000).toISOString(),
+}));
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [posts, setPosts] = useState(initialPosts);
+  const [draggedPost, setDraggedPost] = useState<IPost | null>(null);
+  const [draggingIndex, setDraggingIndex] = useState<number | null>(null);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleDragStart = (post: IPost, index: number) => {
+    setDraggedPost(post);
+    setDraggingIndex(index);
+  };
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+  };
+  const handleDrop = (index: number) => {
+    if (draggedPost) {
+      const newPosts = posts.filter((post) => post.id !== draggedPost.id);
+      newPosts.splice(index, 0, draggedPost);
+      setPosts(newPosts);
+      setDraggedPost(null);
+      setDraggingIndex(null);
+    }
+  };
+
+  return (
+    <div>
+      <div className="grid grid-cols-12 gap-4  ">
+        <div className="sticky top-20 z-20 shadow-md col-span-3 custom-height rounded-md overflow-auto">
+          <h2 className="sticky top-0 text-xl font-bold mb-4 bg-[#fafafa] z-30  p-2">
+            Gündemdeki Maddeler
+          </h2>
+          <ul className="space-y-2 p-2">
+            {topics.map((topic) => (
+              <li key={topic.id} className="p-2 border-b border-gray-200">
+                <a className="text-blue-500 hover:underline">{topic.title}</a>
+                <p className="text-sm text-gray-600">{topic.description}</p>
+              </li>
+            ))}
+          </ul>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+        <div className="col-span-9 flex flex-col gap-4">
+          <div className="flex justify-end items-center w-full gap-1">
+            <a
+              href="/announcement"
+              className="bg-blue-500 text-white p-2 rounded-md"
+            >
+              Duyuru Oluştur
+            </a>
+            <button
+              onClick={handleOpenModal}
+              className="bg-blue-500 text-white p-2 rounded-md"
+            >
+              Ekle
+            </button>
+          </div>
+          {posts.map((post, index) => (
+            <div
+              key={post.id}
+              draggable
+              onDragStart={() => handleDragStart(post, index)}
+              onDragOver={handleDragOver}
+              onDrop={() => handleDrop(index)}
+              className={`flex items-center gap-1 pb-4 pt-4  shadow-lg border-l-4 border-blue-300 rounded-md ${
+                draggingIndex === index ? "shadow-2xl bg-white" : ""
+              }`}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 6.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 12.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5ZM12 18.75a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5Z"
+                />
+              </svg>
+
+              <p>{post.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div
+        style={{ display: isModalOpen ? "flex" : "none" }}
+        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
+      >
+        <div className="bg-white p-6 rounded-md shadow-lg">
+          <h2 className="text-xl font-bold mb-4">Modal Başlığı</h2>
+          <p>Bu bir modal içerik örneğidir.</p>
+          <button
+            onClick={handleCloseModal}
+            className="mt-4 bg-red-500 text-white p-2 rounded-md"
+          >
+            Kapat
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
