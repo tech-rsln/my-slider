@@ -34,3 +34,11 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Site İçi Duyuru & Sunum Aracı
+
+Bu proje, temel bir PowerPoint alternatifi olarak site içinde duyuru yapmak veya kısa sunumlar hazırlamak için geliştirilmiştir. Kullanıcılar kolayca slaytlar oluşturabilir, düzenleyebilir ve paylaşabilirler. Özellikle kurum içi bilgilendirme, eğitim veya hızlı sunum ihtiyaçları için idealdir.
+
+Aşağıda örnek bir ekran görüntüsü görebilirsiniz:
+
+![Duyuru Sunum Aracı](public/announcement.png)
