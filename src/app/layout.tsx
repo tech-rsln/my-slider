@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Header from "@/container/Header/Header";
-import Image from "next/image";
-import Icon from "@/assets/vercel.svg";
+import Header from "./components/Header";
+import HeaderContainer from "./container/Header/HeaderContainer";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -32,15 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <Header>
-          <div className="container mx-auto flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <Image src={Icon} alt="logo" width={20} height={20} />
-              <a className="text-lg font-bold">Slide Builder</a>
-            </div>
-            <div className="inline-flex items-center justify-center w-10 h-10 text-xl text-white bg-indigo-500 rounded-full">
-              H
-            </div>
-          </div>
+          <HeaderContainer />
         </Header>
         <main className="container mx-auto p-4">{children}</main>
       </body>
